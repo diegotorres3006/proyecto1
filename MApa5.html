@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+	<script type='text/javascript'>
+    var map, watchId, userPin;
+
+    function GetMap()
+    {
+        map = new Microsoft.Maps.Map('#myMap', {
+            credentials: 'AiAjZHdjl-VJWo46f52mHiBzTzzAQEKqLn-AcAe9Gnl_kYV4gmlx0v1WF8oQZCf0'
+        });
+        
+    }
+
+    function StartTracking() {
+        //Agregar indicador para mostrar la ubicación del usuario
+        userPin = new Microsoft.Maps.Pushpin(map.getCenter(), { visible: false });
+        map.entities.push(gpsPin);
+
+        //Detectar geolocalización
+        watchId = navigator.geolocation.watchPosition(UsersLocationUpdated);
+    }
+
+    function UsersLocationUpdated(position) {
+        var loc = new Microsoft.Maps.Location(
+                    position.coords.latitude,
+                    position.coords.longitude);
+
+        //Actualizar indicador de geololaización del usuario.
+        userPin.setLocation(loc);
+        userPin.setOptions({ visible: true });
+
+
+        //Centrar mapa
+        map.setView({ center: loc });
+    }
+
+    function StopTracking() {
+        // Cancelar  actualizaciones de geolocalización
+        navigator.geolocation.clearWatch(watchId);
+
+        //Quitar indicador
+        map.entities.clear();
+    }
+    </script>
+    <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetMap' async defer></script>
+</head>
+<body>
+    <div id="myMap" style="position:relative;width:600px;height:400px;"></div><br/>
+    <input type="button" value="Iniciar seguimiento continuo" onclick="StartTracking()" />
+    <input type="button" value="Detener seguimiento continuo" onclick="StopTracking()"/>
+</body>
+</html>
