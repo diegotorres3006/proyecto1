@@ -1,2 +1,2 @@
 # proyecto1
-Ejecicio api de mapas con JS.
+Ejercicio api de mapas con JS.
